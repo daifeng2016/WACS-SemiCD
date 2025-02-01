@@ -1,0 +1,161 @@
+{
+  "exp_name": "SceneCD",
+  "model":"BRCD",
+  "patch_size":256,
+  "dataset_name": "WHUCD",//LEVCD,WHUCD,GFCD,CDD
+  "dataset_name2": "WHUCD",
+  "data_dir": "D:\\TestData\\CD_Building\\WHU-CD-256\\WHU-CD-256",//D:\TestData\CD_Building\siwei-test\train80
+  "data_dir1": "D:\\TestData\\BCD_Dataset\\GZ_CD",//D:\TestData\CD_Building\CDD\train_pat256
+  "data_dir00": "D:\\TestData\\BCD_Dataset\\LEVIR-CD\\train256",//D:\TestData\CD_Building\LVICD\patch512\train90
+  "data_dir2": "D:\\TestData\\BCD_Dataset\\LEVIR-CD\\train256",
+
+  "val_proportion": 0.1,
+  "iter_per_epoch": 1000,
+  "ramp_up": 1.0,
+  "unsupervised_w": 1,
+  "batch_size": 2,
+  "num_worker": 4,
+  "mode": "Train",
+  "is_train": true,
+  "has_val": true,
+  "ds": 1,
+  "use_test_label": true,
+  "use_KFold": false,
+
+  "network_G_CD": {
+    "which_model_G": "DeepLabCD",
+    "multi_outputs": false,
+    "patch_size":256,
+    "siam_input": true,
+    "in_c": 3,
+    "out_nc": 2,
+    "dec_pos": true,
+    "nf": 32,
+    "use_att": true,
+    "use_res": true,
+    "use_dblock": false,
+    "att_mode": "BAM",
+    "backbone": "resnet50",//seres50,aftiny,afsmall,convnext,maxvit_tiny,cswin_tiny,efficientnet_b1,resnet34,resnet50,swin,resnet18
+    "use_DS": false,
+    "diff_mode": "diff",
+    "decoder_type": "MLP",
+    "act_mode": "relu",
+    "dblock_type": "AS",
+    "use_se": false,
+    "se_block": "BAM",
+    "training_mode": true,
+    "ASPP_type": "AS",
+    "model_head": "pspnet",
+    "use_dangle": false,
+
+    "lightweight": true,
+    "pretrained": true,
+    "use_centerTrans": false,
+    "use_sideOut": false,
+    "fusion_type": "none",//CA,SA,CS
+    "mlp_type": "conv",//conv,skipConv,
+    "back_mode": "Trans",
+    "fuse_mode": "CEFF",//CEFF,Bifusion,GLo
+    "LNum": 4,
+    "use_APE": false,
+    "prj_type": "linear4",//linear4,linear, attention type
+    "use_mix": false,
+    "use_RFB": false,
+    "out_stride": 32,
+    "inter_mode": "none",// cs_ex,ad_ex,latt,latt,latt2,natt,normal_att,none
+    "dec_mode": "UNet",//UNet,MLP,MLPrj,UFormer,TDec,lawin
+    "feaE_mode": "none",//none,CTrans, Afuse,Als,TEnc0,TEnc,CTCom
+    "up_mode": "deconv"//cara,deconv
+  },
+
+
+
+
+   "train": {
+     "nepoch": 80,
+     "semi_ratio": "5%",
+     "semi_mode": "AdaCut",
+     "lamda_u": 1,
+     "use_tea": true,
+     "use_tea2": false,
+     "ramp_iter":4000,
+     "ramp_up_epoch": 10,
+     "tea_alpha": 0.99,
+     "conf_thresh":0.9,
+     "thresh_init":0.85,
+     "ramp_up_start": 0.0,
+  "ramp_up_end": 0.5,
+   "unsupervised_w": 1,
+    "lr_G": 1e-4
+    , "weight_decay_G":1e-4
+    , "momentum": 0.9
+    ,"weight_decay_G_grad": 0
+    , "beta1_G": 0.9
+    , "beta1_G_grad": 0.9
+    , "lr_D": 1e-4
+    , "weight_decay_D": 0
+    , "beta1_D": 0.9
+    ,"clip_grad": false,
+     "lr_scheme": "PolyCycLR"//PolyCycLR,CosineLR,MultiStepLR,CosineRe,LinearExLR
+    , "cosT": 4
+    , "lr_steps": [20000, 50000,100000,150000]
+    , "lr_gamma": 0.5
+    , "pixel_criterion": "l1"
+    , "pixel_weight": 1e-2
+    , "manual_seed": 9
+    , "niter": 2e5
+    , "val_iter": 1e3,
+     "D_update_ratio": 1,
+     "G_update_ratio": 1,
+     "D_init_iters": 0,
+     "val_epoch": 1,
+
+     "warmup_epoch": 0,
+     "fine_tune": false,
+     "use_DS": true,
+     "is_adv_train": false,
+     "epsion": 5e-3,
+     "ita": 2,
+     "alpha": 2,
+     "beta": 0.5,
+     "gamma": 1,
+     "mode": "supervised",
+     "drop_rate": 0,
+
+     "class_weight": [0.01,3.0,1.0,1.0,1.0,1.0,9.0],
+     "ce_weight": 2.0,
+     "use_rgb255": false,
+     "use_label_smooth": false,
+     "use_CatOut": false,
+     "cat_mode": "cat_feat",
+     "use_progressive_resize": false,
+     "use_se": true,
+     "use_cos_ensemble": false,
+     "cos_cycle": 3,
+     "use_MC6": true,
+     "use_onehot_loss": false,
+     "use_edge_loss": false,
+
+     "use_bicHR": false,
+     "use_SR": false,
+     "SR_Res": "T1",
+     "use_checkpoint": false,
+     "pretrained_path": "none"
+
+   },
+
+  "logger": {
+    "print_freq": 100,
+    "save_checkpoint_freq": 5e3,
+    "save_epoch": 50,
+    "save_iter": 5e4
+  },
+  "train_resume": {
+    "use_resume":false,
+    "pretrain_model_G": "DeepLab_resnet_pretrained_init-f81d91e8.pth",
+    "resume_state": "netG_DRLN_net_scale4_SR_block_RRDB_netD_gan_patch_64_batch_2_nepoch_20_17400_DRLN_net.pth",
+    "pre_epoch": 10,
+    "pre_iter": 100
+  }
+
+}
